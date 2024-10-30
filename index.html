@@ -2,31 +2,34 @@
   <head>
     <title>Test</title>
     <script type="text/javascript">
-      let requestCount = 0;
-      const outputElement = document.getElementById("output");
-      const makeRequest = async () => {
-        const url = "https://httpbin.org/post";
-        const response = await fetch(url, { mode: "cors", method: "post" });
-        if (response.ok) {
-          requestCount++;
-          const responseJson = await response.json();
-          const outputLine = `Response success [${response.status}] n=${requestCount}]`;
-          console.warn(outputLine);
-          const newLine = document.createElement("div");
-          const newContent = document.createTextNode(outputLine);
-          newLine.appendChild(newContent);
+      const main = () => {
+        let requestCount = 0;
+        const outputElement = document.getElementById("output");
+        const makeRequest = async () => {
+          const url = "https://httpbin.org/post";
+          const response = await fetch(url, { mode: "cors", method: "post" });
+          if (response.ok) {
+            requestCount++;
+            const responseJson = await response.json();
+            const outputLine = `Response success [${response.status}] n=${requestCount}]`;
+            console.warn(outputLine);
+            const newLine = document.createElement("div");
+            const newContent = document.createTextNode(outputLine);
+            newLine.appendChild(newContent);
 
-          outputElement.appendChild(newLine);
-        } else {
-          throw new Error('HTTP error! Status: ' + response.status);
-        }
+            outputElement.appendChild(newLine);
+          } else {
+            throw new Error('HTTP error! Status: ' + response.status);
+          }
+        };
+
+        setTimeout(makeRequest, 2000);
       };
-
-      setTimeout(makeRequest, 2000);
     </script>
   </head>
   <body>
     <h1>Hello world</h1>
+    <button onclick="main()">GO</button>
     <div id="output"></div>
   </body>
 </html>
