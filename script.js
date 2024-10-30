@@ -1,12 +1,35 @@
 const originalTime = new Date().getTime();
 let lastTime = originalTime;
+const abortController = new AbortController();
+const abortSignal = abortController.signal;
+let timeout;
 
-const main = () => {
+const main = (useExperiment = false) => {
+  if (useExperiment) {
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        if (timeout) {
+          clearTimeout(timeout);
+        }
+        abortController.abort("Document was hidden, aborting request");
+      } else {
+        console.warn("Document is visible again, re-attempting request");
+        timeout = setTimeout(makeRequest, 2000);
+      }
+    });
+  }
   let requestCount = 0;
   const outputElement = document.getElementById("output");
   const makeRequest = async () => {
     const url = "https://httpbin.org/post";
-    const response = await fetch(url, { mode: "cors", method: "post" });
+    const options = {
+      mode: "cors",
+      method: "post",
+    }
+    if (useExperiment) {
+      options.signal = abortSignal;
+    }
+    const response = await fetch(url, options);
     const time = new Date().getTime();
 
     if (response.ok) {
@@ -19,16 +42,16 @@ const main = () => {
       newLine.appendChild(newContent);
 
       lastTime = time;
-      setTimeout(makeRequest, 2000);
+      timeout = setTimeout(makeRequest, 2000);
       outputElement.appendChild(newLine);
     } else {
       lastTime = time;
-      setTimeout(makeRequest, 2000);
+      timeout = setTimeout(makeRequest, 2000);
       throw new Error('HTTP error! Status: ' + response.status);
     }
   };
 
-  setTimeout(() => {
+  timeout = setTimeout(() => {
     makeRequest();
   }, 2000);
 };
