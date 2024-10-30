@@ -17,14 +17,16 @@
             const newContent = document.createTextNode(outputLine);
             newLine.appendChild(newContent);
 
+            setTimeout(makeRequest, 2000);
             outputElement.appendChild(newLine);
           } else {
+            setTimeout(makeRequest, 2000);
             throw new Error('HTTP error! Status: ' + response.status);
           }
         };
 
         setTimeout(() => {
-          makeRequest().finally(makeRequest);
+          makeRequest();
         }, 2000);
       };
     </script>
