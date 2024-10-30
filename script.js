@@ -1,7 +1,7 @@
 const originalTime = new Date().getTime();
 let lastTime = originalTime;
-const abortController = new AbortController();
-const abortSignal = abortController.signal;
+let abortController;
+let abortSignal;
 let timeout;
 
 const main = (useExperiment = false) => {
@@ -11,7 +11,9 @@ const main = (useExperiment = false) => {
         if (timeout) {
           clearTimeout(timeout);
         }
-        abortController.abort("Document was hidden, aborting request");
+        if (abortController) {
+          abortController.abort("Document was hidden, aborting request");
+        }
       } else {
         console.warn("Document is visible again, re-attempting request");
         timeout = setTimeout(makeRequest, 2000);
@@ -27,14 +29,18 @@ const main = (useExperiment = false) => {
       method: "post",
     }
     if (useExperiment) {
+      abortController = new AbortController();
+      abortSignal = abortController.signal;
       options.signal = abortSignal;
     }
     const response = await fetch(url, options);
+    abortSignal = null;
+    abortController = null;
     const time = new Date().getTime();
 
     if (response.ok) {
       requestCount++;
-      const responseJson = await response.json();
+      // const responseJson = await response.json();
       const outputLine = `Response success [${response.status}] n=${requestCount}, time=${time}, delta=${time - lastTime}`;
       console.warn(outputLine);
       const newLine = document.createElement("div");
