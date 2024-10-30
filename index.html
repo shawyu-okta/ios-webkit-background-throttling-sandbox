@@ -11,7 +11,7 @@
           if (response.ok) {
             requestCount++;
             const responseJson = await response.json();
-            const outputLine = `Response success [${response.status}] n=${requestCount}]`;
+            const outputLine = `Response success [${response.status}] n=${requestCount}`;
             console.warn(outputLine);
             const newLine = document.createElement("div");
             const newContent = document.createTextNode(outputLine);
@@ -23,7 +23,9 @@
           }
         };
 
-        setTimeout(makeRequest, 2000);
+        setTimeout(() => {
+          makeRequest().finally(makeRequest);
+        }, 2000);
       };
     </script>
   </head>
