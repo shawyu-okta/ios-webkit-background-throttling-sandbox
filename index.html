@@ -2,16 +2,19 @@
   <head>
     <title>Test</title>
     <script type="text/javascript">
+      const originalTime = new Date().getTime();
       const main = () => {
         let requestCount = 0;
         const outputElement = document.getElementById("output");
         const makeRequest = async () => {
           const url = "https://httpbin.org/post";
           const response = await fetch(url, { mode: "cors", method: "post" });
+          const time = new Date().getTime();
+
           if (response.ok) {
             requestCount++;
             const responseJson = await response.json();
-            const outputLine = `Response success [${response.status}] n=${requestCount}`;
+            const outputLine = `Response success [${response.status}] n=${requestCount}, time=${time}, delta=${time - originalTime}`;
             console.warn(outputLine);
             const newLine = document.createElement("div");
             const newContent = document.createTextNode(outputLine);
