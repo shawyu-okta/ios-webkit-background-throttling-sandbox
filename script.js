@@ -4,10 +4,6 @@ let abortController;
 let abortSignal;
 let timeout;
 
-const createAudioContext = () => {
-  const audioContext = new AudioContext();
-};
-
 const main = (useExperiment = false) => {
   if (useExperiment) {
     document.addEventListener("visibilitychange", () => {
