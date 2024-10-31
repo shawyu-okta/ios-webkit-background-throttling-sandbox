@@ -5,6 +5,10 @@ let abortSignal;
 let timeout;
 
 const main = (useExperiment = false) => {
+  // Disable the start buttons
+  document.getElementById("start1").setAttribute("disabled", "true");
+  document.getElementById("start2").setAttribute("disabled", "true");
+
   if (useExperiment) {
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
