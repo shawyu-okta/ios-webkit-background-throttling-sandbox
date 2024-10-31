@@ -1,12 +1,24 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <title>ios-webkit-background-throttling-sandbox</title>
     <script type="text/javascript" src="script.js"></script>
   </head>
-  <body>
-    <h1>Hello world</h1>
-    <button onclick="main(false)">GO</button>
-    <button onclick="main(true)">GO (with experiment)</button>
-    <div id="output"></div>
+  <body style="font-family: sans-serif">
+    <p>
+      Click to start using <code>setTimeout</code> with a callback to make a simple HTTP request every 2000ms.
+    </p>
+    <button id="start1" onclick="main(false)">START</button>
+    <hr />
+    <p>
+      Click to start making requests (as above) but using the Visibility API and <code>AbortController</code> to workaround the issue.
+    </p>
+    <button id="start2" onclick="main(true)">START</button>
+    <hr />
+
+    <h2>Output:</h2>
+    <div id="output" style="font-family: monospace; background-color: lightgray"></div>
   </body>
 </html>
